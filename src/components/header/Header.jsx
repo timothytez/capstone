@@ -16,6 +16,8 @@ import {
   import { format } from 'date-fns';
   import React from 'react';
   import { useNavigate } from 'react-router-dom';
+  import{db} from '../../firebase';
+  
   
   
   const Header = ({type}) => {
@@ -47,8 +49,25 @@ import {
       });
     };
 
-    const handleSearch = ()=>{
+    const handleSearch = async()=>{
       navigate('/hotels', {state:{destination,date,options}})
+    }
+    try {
+      // Assuming 'options' and 'date' are the search parameters
+      const searchRef = db.collection('searches'); // Reference to a 'searches' collection
+  
+      // Create a new document with the search parameters
+       searchRef.add({
+        options,
+        date,
+        timestamp: new Date() // You can include a timestamp to track when the search was made
+      });
+  
+      // Optionally, you can add a success message or perform other actions upon successful upload.
+      console.log('Search data saved successfully!');
+    } catch (error) {
+      // Handle the error if the upload fails
+      console.error('Error saving search data:', error);
     }
 
     return (

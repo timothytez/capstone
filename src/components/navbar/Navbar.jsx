@@ -1,6 +1,28 @@
 import "./navbar.css";
+import {UserAuth} from "../../components/context/AuthContext";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import React from 'react';
+
+const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate()
+
+  const {signIn} = UserAuth()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('')
+    try {
+      await signIn(email, password)
+      navigate('/account')
+    } catch (e) {
+      setError(e.message)
+      console.log(e.message)
+    }
+  }};
 
 const Navbar = () => {
   return (
